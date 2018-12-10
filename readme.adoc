@@ -4,7 +4,7 @@ This image is based on the latest Keycloak Dockerimage `4.7.0.Final`
 and `jgroups-kubernetes-1.0.9.Final` library which provides the `KUBE_PING`
 service discovery mechanism.
 
-==== Patches to the original Keycloak Dockerimage
+== Patches to the original Keycloak Dockerimage
 
 Upgraded jgroups-kuberntes version from 1.0.6 to 1.0.9.
 
@@ -23,7 +23,7 @@ will result in:
 port_range=>1,namespace=>default,labels=>app=keycloak,masterHost=>kubernetes.default.svc,masterPort=>443
 -----
 
-==== Build image
+== Build the Dockerimage
 [source,bash]
 -----
 docker build -t thomasdarimont/keycloak-kubeping:latest .
