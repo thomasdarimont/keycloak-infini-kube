@@ -1,7 +1,7 @@
 = Keycloak Dockerimage with service discovery via KUBE_PING
 
-This image is based on the latest Keycloak Dockerimage `4.7.0.Final` 
-and `jgroups-kubernetes-1.0.9.Final` library which provides the `KUBE_PING`
+This image is based on the latest https://github.com/jboss-dockerfiles/keycloak/tree/master/server[Keycloak Dockerimage^] `4.7.0.Final` 
+and https://search.maven.org/artifact/org.jgroups.kubernetes/jgroups-kubernetes/1.0.9.Final/jar[jgroups-kubernetes-1.0.9.Final^] library which provides the `KUBE_PING`
 service discovery mechanism.
 
 == Patches to the original Keycloak Dockerimage
@@ -13,14 +13,14 @@ Adjusted the `=` to `=>` substitution mechanism in `tools/jgroups.sh` to be more
 
 [source]
 -----
-port_range=1,namespace=default,labels=app:=keycloak,masterHost=kubernetes.default.svc,masterPort=443
+port_range=1,namespace=default,labels=app:=keycloak,foo:=bar,masterHost=kubernetes.default.svc,masterPort=443
 -----
 
 will result in:
 
 [source]
 -----
-port_range=>1,namespace=>default,labels=>app=keycloak,masterHost=>kubernetes.default.svc,masterPort=>443
+port_range=>1,namespace=>default,labels=>app=keycloak,foo=bar,masterHost=>kubernetes.default.svc,masterPort=>443
 -----
 
 == Build the Dockerimage
@@ -29,12 +29,37 @@ port_range=>1,namespace=>default,labels=>app=keycloak,masterHost=>kubernetes.def
 docker build -t thomasdarimont/keycloak-kubeping:latest .
 -----
 
+== Dockerimage Options
+
+The following environment variables can be configured:
+
+* `KUBERNETES_NAMESPACE default`
+
+The Kubernetes namespace to use.
+
+* `KUBERNETES_SERVICE_HOST kubernetes.$KUBERNETES_NAMESPACE.svc`
+
+The name of the Kubernetes API server.
+
+* `KUBERNETES_SERVICE_PORT 443`
+
+The port of the Kubernetes API server.
+
+
+* `KUBERNETES_LABELS "app:=keycloak"`
+
+The comma separated list of labels. Note that `:=` is replaced with `=`.
+
+* `JGROUPS_DISCOVERY_PROPERTIES "port_range=1,namespace=$KUBERNETES_NAMESPACE,labels=$KUBERNETES_LABELS,masterHost=$KUBERNETES_SERVICE_HOST,masterPort=$KUBERNETES_SERVICE_PORT"`
+
+The JGROUPS discovery options.
+
 ==== Configure Kubernetes serviceaccount for KUBE_PING
 
 You need to associate your PODs with the `serviceAccountName: keycloak-kubeping-service-account`
 such that `KUBE_PING` can discover the other Keycloak nodes in the cluster.
 
-Kubernetes Service configuration adapted from https://github.com/jgroups-extras/jgroups-kubernetes/tree/master[jgroups-extras/jgroups-kubernetes^]
+The Kubernetes Service configuration adapted from https://github.com/jgroups-extras/jgroups-kubernetes/tree/master[jgroups-extras/jgroups-kubernetes^].
 
 [source,bash]
 -----

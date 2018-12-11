@@ -7,7 +7,7 @@ ENV KUBERNETES_NAMESPACE default
 ENV KUBERNETES_SERVICE_HOST kubernetes.$KUBERNETES_NAMESPACE.svc
 ENV KUBERNETES_SERVICE_PORT 443
 
-# comman separated list of labels
+# comma separated list of labels
 # := is replaced with =
 ENV KUBERNETES_LABELS "app:=keycloak"
 
