@@ -31,6 +31,9 @@ docker build -t thomasdarimont/keycloak-kubeping:latest .
 
 ==== Configure Kubernetes serviceaccount for KUBE_PING
 
+You need to associate your PODs with the `serviceAccountName: keycloak-kubeping-service-account`
+such that `KUBE_PING` can discover the other Keycloak nodes in the cluster.
+
 Kubernetes Service configuration adapted from https://github.com/jgroups-extras/jgroups-kubernetes/tree/master[jgroups-extras/jgroups-kubernetes^]
 
 [source,bash]
